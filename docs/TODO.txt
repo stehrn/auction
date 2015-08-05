@@ -1,0 +1,17 @@
+
+Current data structures will grow, nothing to clear them down when an auction closes, for example
+
++ Discuss:
+  + Concurrency requirements - current impl is thread save although some of choices could introduce thread contention
+  + Latency requirements - current impl creates quite a few objects
+  + Architecture - requirements to run across distributes env
+
++ Testing, add:
+  + Finer grained tests
+  + Concurrency tests
+
++ Functionality:
+  + A user can bid against themselves - add check to ignore (throw error?) if this happens
+
++ Other
+ + Look into use of Vert.x for next step in development - spin up service to accept bid requests
