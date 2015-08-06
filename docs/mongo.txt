@@ -1,0 +1,14 @@
+
+// start up mongod
+
+mkdir /auction/db
+mongod -dbpath auction/db
+
+// Run commands from command line
+
+// fire up mongo command line shell
+mongo
+// switch to auction db
+use auction
+// find all items
+db.items.find()

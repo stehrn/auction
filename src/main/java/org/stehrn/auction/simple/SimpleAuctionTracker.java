@@ -1,5 +1,6 @@
-package org.stehrn.auction;
+package org.stehrn.auction.simple;
 
+import org.stehrn.auction.AuctionHouseForBidder;
 import org.stehrn.auction.api.AuctionHouse;
 import org.stehrn.auction.api.AuctionTracker;
 import org.stehrn.auction.api.BidsForItem;

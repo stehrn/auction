@@ -1,10 +1,11 @@
-package org.stehrn.auction;
+package org.stehrn.auction.simple;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.stehrn.auction.model.Bid;
 import org.stehrn.auction.model.Bidder;
 import org.stehrn.auction.model.Item;
+import org.stehrn.auction.simple.SimpleAuctionTracker;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,8 +36,8 @@ public class AuctionTrackerTest {
     public void before() {
         bidder1 = new Bidder("Harry");
         bidder2 = new Bidder("Sally");
-        item1 = new Item("Fridge");
-        item2 = new Item("TV");
+        item1 = new Item("1", "Fridge");
+        item2 = new Item("2", "TV");
         tracker = new SimpleAuctionTracker(s -> {});
     }
 

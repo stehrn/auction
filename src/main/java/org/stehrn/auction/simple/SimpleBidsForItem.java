@@ -1,4 +1,4 @@
-package org.stehrn.auction;
+package org.stehrn.auction.simple;
 
 import org.stehrn.auction.api.BidListener;
 import org.stehrn.auction.api.BidsForItem;

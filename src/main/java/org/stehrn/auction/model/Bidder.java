@@ -22,6 +22,10 @@ public class Bidder {
         return Objects.equals(name, bidder.name);
     }
 
+    public String getName() {
+        return name;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(name);

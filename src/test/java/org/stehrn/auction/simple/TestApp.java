@@ -1,10 +1,11 @@
-package org.stehrn.auction;
+package org.stehrn.auction.simple;
 
 import org.stehrn.auction.api.Auction;
 import org.stehrn.auction.api.AuctionHouse;
 import org.stehrn.auction.api.BidsForItem;
 import org.stehrn.auction.model.Bidder;
 import org.stehrn.auction.model.Item;
+import org.stehrn.auction.simple.SimpleAuctionTracker;
 
 import java.util.function.Consumer;
 
@@ -14,8 +15,8 @@ import java.util.function.Consumer;
 public class TestApp {
 
     public static void main(String[] args) {
-        Item item1 = new Item("Boring book about C++");
-        Item item2 = new Item("Effective Java");
+        Item item1 = new Item("1", "Boring book about C++");
+        Item item2 = new Item("2", "Effective Java");
 
         Bidder nerys = new Bidder("Nerys");
         Bidder nik = new Bidder("Nik");
