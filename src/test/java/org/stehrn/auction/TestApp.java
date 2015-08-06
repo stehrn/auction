@@ -38,17 +38,17 @@ public class TestApp {
         item2AuctionForNik.bid(20);
 
         BidsForItem item1Bids = auctionTracker.getBids(item1);
+        // Get all the bids for an item
         log.accept("item1 history: " + item1Bids.history());
+        // Get the current winning bid for an item
         log.accept("item1 winning bid: " + item1Bids.currentWinningBid());
 
         BidsForItem item2Bids = auctionTracker.getBids(item2);
         log.accept("item2 history: " + item2Bids.history());
         log.accept("item2 winning bid: " + item2Bids.currentWinningBid());
 
+        // Get all the items on which a user has bid
         log.accept("Nerys items: " + auctionTracker.getItems(nerys).items());
         log.accept("Niks items: " + auctionTracker.getItems(nik).items());
-
-
-
     }
 }

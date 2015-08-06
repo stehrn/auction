@@ -18,15 +18,19 @@ class SimpleBidsForItem implements BidListener {
 
     @Override
     public void bid(Item item, Bid bid) {
-        getBids(item).add(bid);
+        getBidsCreateIfAbsent(item).add(bid);
     }
 
-    Bids getBids(Item item) {
+    BidsForItem getBids(Item item) {
+        return getBidsCreateIfAbsent(item);
+    }
+
+    private Bids getBidsCreateIfAbsent(Item item) {
         return bidsForItem.computeIfAbsent(item, k -> new Bids());
     }
 
     private class Bids implements BidsForItem {
-        private final List<Bid> bids = Collections.synchronizedList(new ArrayList<>()); // TODO revisit
+        private final List<Bid> bids = Collections.synchronizedList(new ArrayList<>());
         private final AtomicReference<Bid> winningPrice = new AtomicReference<>();
 
         void add(Bid bid) {
@@ -36,7 +40,7 @@ class SimpleBidsForItem implements BidListener {
 
         @Override
         public List<Bid> history() {
-            return bids; //TODO - decide whether to get defensive here..
+            return Collections.unmodifiableList(bids);
         }
 
         @Override

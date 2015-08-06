@@ -21,10 +21,14 @@ class SimpleItemsForBidder implements BidListener {
 
     @Override
     public void bid(Item item, Bid bid) {
-        getItems(bid.source()).add(item);
+        getItemsCreateIfAbsent(bid.source()).add(item);
     }
 
-    ItemsForBidderImpl getItems(Bidder bidder) {
+    ItemsForBidder getItems(Bidder bidder) {
+        return getItemsCreateIfAbsent(bidder);
+    }
+
+    private ItemsForBidderImpl getItemsCreateIfAbsent(Bidder bidder) {
         return itemsForBidder.computeIfAbsent(bidder, k -> new ItemsForBidderImpl());
     }
 
@@ -33,7 +37,7 @@ class SimpleItemsForBidder implements BidListener {
 
         @Override
         public Set<Item> items() {
-            return items;
+            return Collections.unmodifiableSet(items);
         }
 
         void add(Item item) {

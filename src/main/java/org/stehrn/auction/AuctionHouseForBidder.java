@@ -13,12 +13,12 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /**
  * Created by Nik on 05/08/2015.
  */
-class SimpleAuctionHouse implements AuctionHouse {
+class AuctionHouseForBidder implements AuctionHouse {
 
     private final Bidder bidder;
     private final List<BidListener> listeners = new CopyOnWriteArrayList<>();
 
-    SimpleAuctionHouse(Bidder bidder) {
+    AuctionHouseForBidder(Bidder bidder) {
         this.bidder = bidder;
     }
 

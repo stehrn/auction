@@ -24,7 +24,7 @@ public class SimpleAuctionTracker implements AuctionTracker {
     }
 
     public AuctionHouse join(Bidder bidder) {
-        SimpleAuctionHouse auctionHouse = new SimpleAuctionHouse(bidder);
+        AuctionHouseForBidder auctionHouse = new AuctionHouseForBidder(bidder);
         auctionHouse.addListener(bidsForItem);
         auctionHouse.addListener(itemsForBidder);
         auctionHouse.addListener((item, bid) -> logger.accept((String.format("Bid for item: %s, bid: %s", item, bid))));

@@ -13,6 +13,9 @@ public class Bid {
         this.amount = amount;
     }
 
+    public static Bid with(Bidder bidder, long amount) {
+        return new Bid(bidder, amount);
+    }
 
     public Bidder source() {
         return source;
@@ -28,10 +31,6 @@ public class Bid {
 
     private boolean isHigherThan(Bid bid) {
         return bid == null || amount() > bid.amount();
-    }
-
-    public static Bid with(Bidder bidder, long amount) {
-        return new Bid(bidder, amount);
     }
 
     @Override
