@@ -1,23 +1,18 @@
 package org.stehrn.auction.mongo;
 
-import org.stehrn.auction.api.Auction;
-import org.stehrn.auction.api.AuctionHouse;
-import org.stehrn.auction.api.BidsForItem;
+import org.stehrn.auction.api.*;
 import org.stehrn.auction.model.Bidder;
 import org.stehrn.auction.model.Item;
 
 import java.io.IOException;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CountDownLatch;
 import java.util.function.Consumer;
 
 /**
  * Created by Nik on 06/08/2015.
  */
 public class TestApp {
-
-    private ItemRepository itemRepository;
 
     public static void main(String[] args) throws IOException, InterruptedException {
         if (args.length == 0) {
@@ -31,45 +26,44 @@ public class TestApp {
 
         Consumer<String> log = System.out::println;
 
-        itemRepository = new MongoApp(mongoURIString).createItemRepository();
+        MongoApp mongoApp = new MongoApp(mongoURIString);
+        ItemRepository itemRepository = mongoApp.createItemRepository();
 
-        // create item
-        Item fridge = itemRepository.create("Fridge", "As new Samsumg American style fridge");
+        // createItem item
+        Item fridge = itemRepository.createItem("TV", "Sony TV, plasma");
         log.accept("created: " + fridge);
-        log.accept("trying to findItem fridge with id: " + fridge.getId());
+        log.accept("trying to findItem with id: " + fridge.getId());
         Optional<Item> fridgeItem = itemRepository.findItem(fridge.getId());
         log.accept("found: " + fridgeItem.orElse(null));
 
         // place bids
-        CountDownLatch latch = new CountDownLatch(3);
-        bid(latch, mongoURIString, "nik", fridge, 100, 200, 101, 102, 104, 105, 107);
-        bid(latch, mongoURIString, "james", fridge, 300, 400, 401, 403, 444, 666, 678);
-        bid(latch, mongoURIString, "nerys", fridge, 50, 350, 600, 601, 901, 902, 903, 904);
-        latch.await();
+        CompletableFuture.allOf(
+                bid(mongoURIString, "nik", fridge, 100, 200, 101, 102, 104, 105, 107),
+                bid(mongoURIString, "james", fridge, 300, 400, 401, 403, 444, 666, 678),
+                bid(mongoURIString, "nerys", fridge, 50, 350, 600, 601, 901, 902, 903, 904)
+                ).join();
 
         // check result
-        MongoAuctionTracker auctionTracker = new MongoAuctionTracker(itemRepository);
+        AuctionTracker auctionTracker = mongoApp.createAuctionTracker();
         BidsForItem bidsForItem = auctionTracker.getBids(fridgeItem.get());
         log.accept("bids for fridge: " + bidsForItem.history());
         // nerys 904 ?
-        log.accept("current winning bid for fridge: " + bidsForItem.currentWinningBid());
+        log.accept("current winning bid: " + bidsForItem.currentWinningBid());
     }
 
     // notice how we start separate apps
-    private CompletableFuture<Void> bid(CountDownLatch latch, String mongoURIString, String user, Item item, long... amounts) {
+    private CompletableFuture<Void> bid(String mongoURIString, String user, Item item, long... amounts) {
         return CompletableFuture.runAsync(() -> {
-                    MongoApp mongoApp = new MongoApp(mongoURIString);
-                    ItemRepository itemRepository = mongoApp.createItemRepository();
-                    MongoAuctionTracker auctionTracker = new MongoAuctionTracker(itemRepository);
+                    try (MongoApp mongoApp = new MongoApp(mongoURIString)) {
 
-                    Bidder bidder = new Bidder(user);
-                    AuctionHouse auctionHouse = auctionTracker.join(bidder);
-                    Auction auction = auctionHouse.auctionFor(item);
-                    for (long amount : amounts) {
-                        auction.bid(amount);
+                        AuctionTracker auctionTracker = mongoApp.createAuctionTracker();
+                        Bidder bidder = new Bidder(user);
+                        AuctionHouse auctionHouse = auctionTracker.join(bidder);
+                        Auction auction = auctionHouse.auctionFor(item);
+                        for (long amount : amounts) {
+                            auction.bid(amount);
+                        }
                     }
-                    mongoApp.close();
-                    latch.countDown();
                 }
         );
     }

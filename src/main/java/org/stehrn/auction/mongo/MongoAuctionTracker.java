@@ -17,14 +17,15 @@ import static java.util.Comparator.comparing;
 /**
  * Created by Nik on 06/08/2015.
  */
-public class MongoAuctionTracker implements AuctionTracker {
+class MongoAuctionTracker implements AuctionTracker {
 
-    private final ItemRepository itemRepository;
+    private final MongoItemRepository itemRepository;
 
-    public MongoAuctionTracker(ItemRepository itemRepository) {
+    MongoAuctionTracker(MongoItemRepository itemRepository) {
         this.itemRepository = itemRepository;
     }
 
+    @Override
     public AuctionHouse join(Bidder bidder) {
         AuctionHouseForBidder auctionHouse = new AuctionHouseForBidder(bidder);
         auctionHouse.addListener((item, bid) -> itemRepository.bid(item.getId(), bid.amount(), bid.source().getName()));

@@ -2,10 +2,10 @@ package org.stehrn.auction.simple;
 
 import org.stehrn.auction.api.Auction;
 import org.stehrn.auction.api.AuctionHouse;
+import org.stehrn.auction.api.AuctionTracker;
 import org.stehrn.auction.api.BidsForItem;
 import org.stehrn.auction.model.Bidder;
 import org.stehrn.auction.model.Item;
-import org.stehrn.auction.simple.SimpleAuctionTracker;
 
 import java.util.function.Consumer;
 
@@ -23,7 +23,7 @@ public class TestApp {
 
         Consumer<String> log = System.out::println;
 
-        SimpleAuctionTracker auctionTracker = new SimpleAuctionTracker(log);
+        AuctionTracker auctionTracker = new SimpleAuctionTracker(log);
         AuctionHouse auctionHouseForNik = auctionTracker.join(nik);
         Auction item1AuctionForNik = auctionHouseForNik.auctionFor(item1);
         Auction item2AuctionForNik = auctionHouseForNik.auctionFor(item2);

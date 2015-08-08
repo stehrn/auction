@@ -24,6 +24,7 @@ public class SimpleAuctionTracker implements AuctionTracker {
         this.logger = logger;
     }
 
+    @Override
     public AuctionHouse join(Bidder bidder) {
         AuctionHouseForBidder auctionHouse = new AuctionHouseForBidder(bidder);
         auctionHouse.addListener(bidsForItem);

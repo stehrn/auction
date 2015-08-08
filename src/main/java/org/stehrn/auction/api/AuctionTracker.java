@@ -6,7 +6,7 @@ import org.stehrn.auction.model.Item;
 /**
  * Created by Nik on 05/08/2015.
  */
-public interface AuctionTracker {
+public interface AuctionTracker extends AuctionApp {
 
     BidsForItem getBids(Item item);
 
